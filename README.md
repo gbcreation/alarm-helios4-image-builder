@@ -32,6 +32,10 @@ $ dd bs=4M if=ArchLinuxARM-helios4-2019-02-24.img of=/dev/sdX conv=fsync
 
 Insert the microSD card to the Helios4 and enjoy Arch Linux ARM on you NAS.
 
+## Are there prebuilt images ready to use?
+
+Look at [Releases](https://github.com/gbcreation/alarm-helios4-image-builder/releases).
+
 ## Known bugs
 
 * LEDs do not light up on disk access.
