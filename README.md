@@ -4,7 +4,7 @@ This Bash script creates an [ArchLinux ARM](https://archlinuxarm.org/) image for
 
 [Helios4](https://kobol.io/helios4/) is an powerful Open Source and Open Hardware Network Attached Storage (NAS) made by Kobol Innovations Pte. Ltd. It harnesses its processing capabilities from the ARMADA 38x-MicroSoM from SolidRun.
 
-The resulting image file contains:
+The resulting image file is based on the generic Arch Linux ARMv7 root filesystem and contains:
 * a Linux kernel [configured and patched](https://github.com/gbcreation/linux-helios4) for Helios4. Especially to make the second fan detected.
 * the udev rules for hardware monitoring.
 * the configuration file and patch for fancontrol originally provided by the Kobol Team for Armbian.
