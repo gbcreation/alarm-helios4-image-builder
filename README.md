@@ -38,7 +38,7 @@ Look at [Releases](https://github.com/gbcreation/alarm-helios4-image-builder/rel
 
 ## Known bugs
 
-* LEDs do not light up on disk access.
+* ~~LEDs do not light up on disk access~~ (fixed since version 2019-02-27)
 
 ## What does this script do?
 
