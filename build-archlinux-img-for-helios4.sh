@@ -17,21 +17,22 @@ IMG_FILE="ArchLinuxARM-helios4-$(date +%Y-%m-%d).img"
 IMG_SIZE="2G"
 MOUNT_DIR="./img"
 ALARM_ROOTFS="http://os.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz"
+LINUX_HELIOS4_VERSION="4.20.12-1"
 
 sources=("${ALARM_ROOTFS}"
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/90-helios4-hwmon.rules'
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/fancontrol_pwm-fan-mvebu-next.conf'
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/mdadm-fault-led.sh'
         'https://raw.githubusercontent.com/helios-4/build/helios4/packages/bsp/helios4/fancontrol.patch'
-        'https://github.com/gbcreation/linux-helios4/releases/download/4.20.11-1/linux-helios4-4.20.11-1-armv7h.pkg.tar.xz'
-        'https://github.com/gbcreation/linux-helios4/releases/download/4.20.11-1/linux-helios4-headers-4.20.11-1-armv7h.pkg.tar.xz')
+        "https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz"
+        "https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/linux-helios4-headers-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz")
 md5sums=('63bd1c55905af69f75cf4c046a89280a'
          'f0162acfa70e2d981c11ec4b0242d5bd'
          '7e1423c3e3b8c3c8df599a54881b5036'
          '0a5bfbea2f1d65b936da6df4085ee5f2'
          'ae5cf06e8a03d1f5845bb962846b281d'
-         'c4c8f8fc8ef8b81a40723d5d0bdfc5b2'
-         '8093f539fdae4dd5cb290063b09b3205')
+         'c488e28f40721b799f13b7def2df33fa'
+         '02797e091d998e125551f231c36e9c84')
 
 echo_step () {
     echo -e "\e[1;32m ${@} \e[0m\n"
