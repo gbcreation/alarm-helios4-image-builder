@@ -135,7 +135,7 @@ echo "PROGRAM /usr/sbin/mdadm-fault-led.sh" >> ${MOUNT_DIR}/etc/mdadm.conf
 echo_step Copy u-boot boot.cmd to ${MOUNT_DIR}/boot...
 cat << 'EOF' > "${MOUNT_DIR}/boot/boot.cmd"
 part uuid ${devtype} ${devnum}:${bootpart} uuid
-setenv bootargs console=${console} root=PARTUUID=${uuid} rw rootwait
+setenv bootargs console=${console} root=PARTUUID=${uuid} rw rootwait loglevel=1
 load ${devtype} ${devnum}:${bootpart} ${kernel_addr_r} /boot/zImage
 load ${devtype} ${devnum}:${bootpart} ${fdt_addr_r} /boot/dtbs/${fdtfile}
 load ${devtype} ${devnum}:${bootpart} ${ramdisk_addr_r} /boot/initramfs-linux.img
