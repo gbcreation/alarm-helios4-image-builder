@@ -128,6 +128,7 @@ echo "PROGRAM /usr/sbin/mdadm-fault-led.sh" >> ${MOUNT_DIR}/etc/mdadm.conf
 
 echo_step Copy u-boot boot.cmd to ${MOUNT_DIR}/boot...
 cat << 'EOF' > "${MOUNT_DIR}/boot/boot.cmd"
+setenv eth1addr "00:50:43:25:fb:84"
 part uuid ${devtype} ${devnum}:${bootpart} uuid
 setenv bootargs console=${console} root=PARTUUID=${uuid} rw rootwait loglevel=1
 load ${devtype} ${devnum}:${bootpart} ${kernel_addr_r} /boot/zImage
