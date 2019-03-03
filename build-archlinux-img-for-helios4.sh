@@ -17,18 +17,18 @@ IMG_FILE="ArchLinuxARM-helios4-$(date +%Y-%m-%d).img"
 IMG_SIZE="2G"
 MOUNT_DIR="./img"
 ALARM_ROOTFS="http://os.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz"
-LINUX_HELIOS4_VERSION="4.20.12-1"
+LINUX_HELIOS4_VERSION=`wget -q -O - https://api.github.com/repos/gbcreation/linux-helios4/releases/latest | sed -En '/tag_name/{s/.*"([^"]+)".*/\1/;p}'`
 
 sources=("${ALARM_ROOTFS}"
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/90-helios4-hwmon.rules'
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/fancontrol_pwm-fan-mvebu-next.conf'
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/mdadm-fault-led.sh'
-        "https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz"
+        "https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz")
 md5sums=('63bd1c55905af69f75cf4c046a89280a'
          'f0162acfa70e2d981c11ec4b0242d5bd'
          '7e1423c3e3b8c3c8df599a54881b5036'
          '0a5bfbea2f1d65b936da6df4085ee5f2'
-         'c488e28f40721b799f13b7def2df33fa')
+         `wget -q -O - https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/md5sums.txt | sed -En "/linux-helios4-${LINUX_HELIOS4_VERSION}/{s/^([0-9a-f]{32}).*$/\1/;p}"`)
 
 echo_step () {
     echo -e "\e[1;32m ${@} \e[0m\n"
@@ -105,7 +105,7 @@ arch-chroot ${MOUNT_DIR} bash -c "
     pacman-key --init &&
     pacman-key --populate archlinuxarm &&
     pacman -Syu --noconfirm --ignore linux-armv7 &&
-    (yes | pacman -U /root/linux-helios4-*-armv7h.pkg.tar.xz) &&
+    (yes | pacman -U /root/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz) &&
     pacman -S --noconfirm lm_sensors &&
     systemctl enable fancontrol.service
 "
