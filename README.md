@@ -7,7 +7,7 @@ This Bash script creates an [ArchLinux ARM](https://archlinuxarm.org/) image for
 The resulting image file is based on the generic Arch Linux ARMv7 root filesystem and contains:
 * a Linux kernel [configured and patched](https://github.com/gbcreation/linux-helios4) for Helios4. Especially to make the second fan detected.
 * the udev rules for hardware monitoring.
-* the configuration file and patch for fancontrol originally provided by the Kobol Team for Armbian.
+* the configuration file for fancontrol originally provided by the Kobol Team for Armbian.
 * the mdadm bash script originally provided by the Kobol Team for Armbian, to report mdadm error events using the Red Faut LED (LED2).
 
 ## Requirements
@@ -55,7 +55,6 @@ Here are all the steps performed by the script:
     * [90-helios4-hwmon.rules](https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/90-helios4-hwmon.rules): udev rules for hardware monitoring
     * [fancontrol_pwm-fan-mvebu-next.conf](https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/fancontrol_pwm-fan-mvebu-next.conf): fancontrol configuration file
     * [mdadm-fault-led.sh](https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/mdadm-fault-led.sh): Bash script used by mdadm to report error events using the Red Faut LED (LED2)
-    * [fancontrol.patch](https://raw.githubusercontent.com/helios-4/build/helios4/packages/bsp/helios4/fancontrol.patch): patch for the fancontrol script fixing 'too many arguments' error message and setting pwm to minimum speed when fancontrol exits (see [this comment](https://forum.armbian.com/topic/6033-helios4-support/?page=2&tab=comments#comment-49490) on the Armbian forum from gprovost).
     * [linux-helios4-4.20.11-1-armv7h.pkg.tar.xz](https://github.com/gbcreation/linux-helios4/releases/download/4.20.11-1/linux-helios4-4.20.11-1-armv7h.pkg.tar.xz) and [linux-helios4-headers-4.20.11-1-armv7h.pkg.tar.xz](https://github.com/gbcreation/linux-helios4/releases/download/4.20.11-1/linux-helios4-headers-4.20.11-1-armv7h.pkg.tar.xz): Linux kernel patched for Helios4 (see https://github.com/gbcreation/linux-helios4)
 * Create a new image file on disk. Change the `ÌMG_FILE` variable in script to set the image filename.
 * Create a new partition in the image file using `fdisk`.
@@ -76,7 +75,6 @@ Here are all the steps performed by the script:
     * enable the fancontrol service to start on boot
 * Remove Helios4 Linux packages from `./img/root`.
 * Remove `qemu-arm-static` from `./img/usr/bin`.
-* Apply `fancontrol.patch` to `./img/usr/sbin/fancontrol`.
 * Copy the fancontrol configuration file `fancontrol_pwm-fan-mvebu-next.conf` to `./img/etc/fancontrol`.
 * Make the `lm75` kernel module loaded on boot by creating `./img/etc/modules-load.d/lm75.conf`.
 * Copy `mdadm-fault-led.sh` to `./img/usr/bin` and set the `PROGRAM` directive to `/usr/sbin/mdadm-fault-led.sh` in `./img/etc/mdadm.conf`.
