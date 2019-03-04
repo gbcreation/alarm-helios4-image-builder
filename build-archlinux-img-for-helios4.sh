@@ -141,6 +141,7 @@ echo_step Compile boot.cmd...
 mkimage -A arm -O linux -T script -C none -a 0 -e 0 -n "Helios4 boot script" -d "${MOUNT_DIR}/boot/boot.cmd" "${MOUNT_DIR}/boot/boot.scr"
 
 echo_step Unmount image partition...
+sync
 umount "${MOUNT_DIR}"
 
 echo_step Build U-Boot...
@@ -159,6 +160,7 @@ dd if=u-boot-spl.kwb of="${LOOP_MOUNT}" bs=512 seek=1
 cd -
 
 echo_step Unmount loop partition...
+sync
 losetup -d "${LOOP_MOUNT}"
 
 echo_step done
