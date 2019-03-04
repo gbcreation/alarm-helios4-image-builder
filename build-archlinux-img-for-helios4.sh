@@ -107,7 +107,8 @@ arch-chroot ${MOUNT_DIR} bash -c "
     pacman -Syu --noconfirm --ignore linux-armv7 &&
     (yes | pacman -U /root/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz) &&
     pacman -S --noconfirm lm_sensors &&
-    systemctl enable fancontrol.service
+    systemctl enable fancontrol.service &&
+    echo helios4 > /etc/hostname
 "
 
 echo_step Remove linux-helios4 packages to ${MOUNT_DIR}/root...
