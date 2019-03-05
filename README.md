@@ -12,11 +12,11 @@ The resulting image file is based on the generic Arch Linux ARMv7 root filesyste
 
 ## Requirements
 
-This script expects to be used on a x86 system running ArchLinux. It needs `qemu-arm-static` to work. You can install it using the **[qemu-user-static](https://aur.archlinux.org/packages/qemu-user-static/)** or **[qemu-user-static-bin](https://aur.archlinux.org/packages/qemu-user-static-bin/)** packages from the AUR.
+This script expects to be run on a **x86 system running ArchLinux**. It needs `qemu-arm-static` to work. You can install it using the **[qemu-user-static](https://aur.archlinux.org/packages/qemu-user-static/)** or **[qemu-user-static-bin](https://aur.archlinux.org/packages/qemu-user-static-bin/)** packages from the AUR.
 
 ## Usage
 
-> **Note:** this script needs to execute commands as the superuser. If not run as root, it will re-run itself using sudo. **It is highly recommanded to review this script and understand what it does before running it on your system.**
+> **Note:** this script needs to execute commands as superuser. If not run as root, it will re-run itself using sudo. **It is highly recommanded to review this script and understand what it does before running it on your system.**
 
 ```
 $ git clone https://github.com/gbcreation/alarm-helios4-image-builder.git
