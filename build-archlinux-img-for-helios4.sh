@@ -23,11 +23,13 @@ sources=("${ALARM_ROOTFS}"
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/90-helios4-hwmon.rules'
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/fancontrol_pwm-fan-mvebu-next.conf'
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/mdadm-fault-led.sh'
+        'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/helios4-wol.service'
         "https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz")
 md5sums=('63bd1c55905af69f75cf4c046a89280a'
          'f0162acfa70e2d981c11ec4b0242d5bd'
          '7e1423c3e3b8c3c8df599a54881b5036'
          '0a5bfbea2f1d65b936da6df4085ee5f2'
+         '2fb1b8a9e8193ac8ff945c6b9e4706e5'
          `wget -q -O - https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/md5sums.txt | sed -En "/linux-helios4-${LINUX_HELIOS4_VERSION}/{s/^([0-9a-f]{32}).*$/\1/;p}"`)
 
 echo_step () {
@@ -94,6 +96,9 @@ sed -e 's/armada_thermal/f10e4078.thermal/' 90-helios4-hwmon.rules > ${MOUNT_DIR
 echo_step Copy linux-helios4 packages to ${MOUNT_DIR}/root...
 cp linux-helios4-*-armv7h.pkg.tar.xz ${MOUNT_DIR}/root
 
+echo_step Copy helios4-wol.service to ${MOUNT_DIR}/usr/lib/systemd/system/...
+cp helios4-wol.service ${MOUNT_DIR}/usr/lib/systemd/system/
+
 echo_step Copy `which qemu-arm-static` to ${MOUNT_DIR}/usr/bin...
 cp `which qemu-arm-static` ${MOUNT_DIR}/usr/bin
 
@@ -106,8 +111,9 @@ arch-chroot ${MOUNT_DIR} bash -c "
     pacman-key --populate archlinuxarm &&
     pacman -Syu --noconfirm --ignore linux-armv7 &&
     (yes | pacman -U /root/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz) &&
-    pacman -S --noconfirm lm_sensors &&
+    pacman -S --noconfirm lm_sensors ethtool &&
     systemctl enable fancontrol.service &&
+    systemctl --no-reload enable helios4-wol.service &&
     echo helios4 > /etc/hostname
 "
 
