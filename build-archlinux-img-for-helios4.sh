@@ -25,7 +25,7 @@ sources=("${ALARM_ROOTFS}"
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/mdadm-fault-led.sh'
         'https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/helios4-wol.service'
         "https://github.com/gbcreation/linux-helios4/releases/download/${LINUX_HELIOS4_VERSION}/linux-helios4-${LINUX_HELIOS4_VERSION}-armv7h.pkg.tar.xz")
-md5sums=('63bd1c55905af69f75cf4c046a89280a'
+md5sums=('1ac50e1b58271e2789215c526cf1b9b9'
          'f0162acfa70e2d981c11ec4b0242d5bd'
          '7e1423c3e3b8c3c8df599a54881b5036'
          '0a5bfbea2f1d65b936da6df4085ee5f2'
