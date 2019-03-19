@@ -5,10 +5,10 @@ This Bash script creates an [ArchLinux ARM](https://archlinuxarm.org/) image for
 [Helios4](https://kobol.io/helios4/) is an powerful Open Source and Open Hardware Network Attached Storage (NAS) made by Kobol Innovations Pte. Ltd. It harnesses its processing capabilities from the ARMADA 38x-MicroSoM from SolidRun.
 
 The resulting image file is based on the generic Arch Linux ARMv7 root filesystem and contains:
-* a Linux kernel [configured and patched](https://github.com/gbcreation/linux-helios4) for Helios4. Especially to make the second fan detected.
 * the udev rules for hardware monitoring.
 * the configuration file for fancontrol originally provided by the Kobol Team for Armbian.
 * the mdadm bash script originally provided by the Kobol Team for Armbian, to report mdadm error events using the Red Faut LED (LED2).
+* a Linux kernel [specifically patched](https://github.com/gbcreation/linux-helios4) for Helios4
 
 ## Requirements
 
@@ -16,7 +16,7 @@ This script expects to be run on a **x86 system running ArchLinux**. It needs `q
 
 ## Usage
 
-> **Note:** this script needs to execute commands as superuser. If not run as root, it will re-run itself using sudo. **It is highly recommanded to review this script and understand what it does before running it on your system.**
+> **Note:** this script needs to execute commands as superuser. If not run as root, it will re-run itself using sudo. **It is highly recommended to review this script and understand what it does before running it on your system.**
 
 ```
 $ git clone https://github.com/gbcreation/alarm-helios4-image-builder.git
@@ -30,7 +30,7 @@ Once the image file is created, write it to a microSD card using [Etcher](http:/
 $ dd bs=4M if=ArchLinuxARM-helios4-2019-02-24.img of=/dev/sdX conv=fsync
 ```
 
-Insert the microSD card to the Helios4 and enjoy Arch Linux ARM on you NAS.
+Insert the microSD card to the Helios4 and enjoy Arch Linux ARM on your NAS.
 
 ## Are there prebuilt images ready to use?
 
@@ -48,8 +48,8 @@ Here are all the steps performed by the script:
 * Check if script is run as root. Re-run itself using `sudo` if not.
 * Check if the following packages are installed (automatically install them if not):
     * [arch-install-scripts](https://www.archlinux.org/packages/extra/any/arch-install-scripts/): use `arch-chroot` to enter to the created chroot
-    * [arm-none-eabi-gcc](https://www.archlinux.org/packages/community/x86_64/arm-none-eabi-gcc/): ARM cross compiler used to compile the u-boot bootloader
-    * [uboot-tools](https://www.archlinux.org/packages/community/x86_64/uboot-tools/): use `mkimage` to compile the u-boot script
+    * [arm-none-eabi-gcc](https://www.archlinux.org/packages/community/x86_64/arm-none-eabi-gcc/): ARM cross compiler used to compile the U-Boot bootloader
+    * [uboot-tools](https://www.archlinux.org/packages/community/x86_64/uboot-tools/): use `mkimage` to compile the U-Boot script
 * Download the root ArchLinux ARM filesystem / patches / Linux packages for Helios4 :
     * [ArchLinuxARM-armv7-latest.tar.gz](http://os.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz): the generic ArchLinux ARMv7 root filesystem
     * [90-helios4-hwmon.rules](https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/90-helios4-hwmon.rules): udev rules for hardware monitoring
@@ -63,10 +63,10 @@ Here are all the steps performed by the script:
 * Mount the formatted partition to the `./img/` sub-directory. Change the `MOUNT_DIR` variable in script to set the target directory.
 * Extract ArchLinuxARM-armv7-latest.tar.gz to `./img/`.
 * Copy `90-helios4-hwmon.rules` to `./img/etc/udev/rules.d`. Patch it to replace the `armada_thermal` device name by `f10e4078.thermal`.
-* Copy Helios4 Linux packages to `./img/root`.
+* Copy the Helios4 Linux package to `./img/root`.
 * Copy `qemu-arm-static` to `./img/usr/bin`.
 * Register qemu-arm-static as ARM interpreter in the host kernel
-* Use `arch-chroot` to enter to the `./img/` chroot and then:
+* Use `arch-chroot` to enter to the `./img/` chroot, then:
     * initialize the Pacman keyring
     * populate the Arch Linux ARM package signing keys
     * upgrade the Arch Linux ARM system
@@ -78,10 +78,10 @@ Here are all the steps performed by the script:
 * Copy the fancontrol configuration file `fancontrol_pwm-fan-mvebu-next.conf` to `./img/etc/fancontrol`.
 * Make the `lm75` kernel module loaded on boot by creating `./img/etc/modules-load.d/lm75.conf`.
 * Copy `mdadm-fault-led.sh` to `./img/usr/bin` and set the `PROGRAM` directive to `/usr/sbin/mdadm-fault-led.sh` in `./img/etc/mdadm.conf`.
-* Create the u-boot script `./img/boot/boot.cmd`.
+* Create the U-Boot script `./img/boot/boot.cmd`.
 * Use `mkimage` to compile `./img/boot/boot.cmd` to `./img/boot/boot.scr`.
 * Unmount the image file partition.
-* Clone the `helios-4/u-boot` Git repository and compile the u-boot bootloader.
+* Clone the `helios-4/u-boot` Git repository and compile the U-Boot bootloader.
 * Copy the compiled u-boot bootloader to the loop device.
 * Unmount the loop device
 
