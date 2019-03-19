@@ -5,10 +5,11 @@ This Bash script creates an [ArchLinux ARM](https://archlinuxarm.org/) image for
 [Helios4](https://kobol.io/helios4/) is an powerful Open Source and Open Hardware Network Attached Storage (NAS) made by Kobol Innovations Pte. Ltd. It harnesses its processing capabilities from the ARMADA 38x-MicroSoM from SolidRun.
 
 The resulting image file is based on the generic Arch Linux ARMv7 root filesystem and contains:
-* the udev rules for hardware monitoring.
-* the configuration file for fancontrol originally provided by the Kobol Team for Armbian.
-* the mdadm bash script originally provided by the Kobol Team for Armbian, to report mdadm error events using the Red Faut LED (LED2).
 * a Linux kernel [specifically patched](https://github.com/gbcreation/linux-helios4) for Helios4
+* the [udev rules](https://wiki.kobol.io/pwm/#udev-rules) for hardware monitoring
+* the [configuration file](https://wiki.kobol.io/pwm/#configuration-file) for fancontrol
+* the [mdadm-fault-led.sh](https://wiki.kobol.io/mdadm/#configure-fault-led) script to report mdadm error events using the Red Fault LED (LED2)
+* the Wake-on-LAN [systemd service](https://wiki.kobol.io/wol/#enabling-wol) to enable the PHY to raise an interrupt when magic packet is received
 
 ## Requirements
 
@@ -52,10 +53,11 @@ Here are all the steps performed by the script:
     * [uboot-tools](https://www.archlinux.org/packages/community/x86_64/uboot-tools/): use `mkimage` to compile the U-Boot script
 * Download the root ArchLinux ARM filesystem / patches / Linux packages for Helios4 :
     * [ArchLinuxARM-armv7-latest.tar.gz](http://os.archlinuxarm.org/os/ArchLinuxARM-armv7-latest.tar.gz): the generic ArchLinux ARMv7 root filesystem
-    * [90-helios4-hwmon.rules](https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/90-helios4-hwmon.rules): udev rules for hardware monitoring
-    * [fancontrol_pwm-fan-mvebu-next.conf](https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/fancontrol_pwm-fan-mvebu-next.conf): fancontrol configuration file
-    * [mdadm-fault-led.sh](https://raw.githubusercontent.com/armbian/build/master/packages/bsp/helios4/mdadm-fault-led.sh): Bash script used by mdadm to report error events using the Red Faut LED (LED2)
-    * [linux-helios4-4.20.11-1-armv7h.pkg.tar.xz](https://github.com/gbcreation/linux-helios4/releases/download/4.20.11-1/linux-helios4-4.20.11-1-armv7h.pkg.tar.xz) and [linux-helios4-headers-4.20.11-1-armv7h.pkg.tar.xz](https://github.com/gbcreation/linux-helios4/releases/download/4.20.11-1/linux-helios4-headers-4.20.11-1-armv7h.pkg.tar.xz): Linux kernel patched for Helios4 (see https://github.com/gbcreation/linux-helios4)
+    * [90-helios4-hwmon.rules](https://github.com/armbian/build/blob/master/packages/bsp/helios4/90-helios4-hwmon.rules): udev rules for hardware monitoring
+    * [fancontrol_pwm-fan-mvebu-next.conf](https://github.com/armbian/build/blob/master/packages/bsp/helios4/fancontrol_pwm-fan-mvebu-next.conf): configuration file for fancontrol
+    * [mdadm-fault-led.sh](https://github.com/armbian/build/blob/master/packages/bsp/helios4/mdadm-fault-led.sh): Bash script used by mdadm to report error events using the Red Fault LED (LED2)
+    * [helios4-wol.service](https://github.com/armbian/build/blob/master/packages/bsp/helios4/helios4-wol.service): Systemd service to enable the PHY to raise an interrupt when magic packat is received on eth0
+    * latest [linux-helios](https://github.com/gbcreation/linux-helios4) package:  Linux kernel specifically patched for Helios4
 * Create a new image file on disk. Change the `ÌMG_FILE` variable in script to set the image filename.
 * Create a new partition in the image file using `fdisk`.
 * Mount the image file as a loop device using `losetup`, forcing the kernel to scan the partition table to detect the partition inside.
@@ -64,6 +66,7 @@ Here are all the steps performed by the script:
 * Extract ArchLinuxARM-armv7-latest.tar.gz to `./img/`.
 * Copy `90-helios4-hwmon.rules` to `./img/etc/udev/rules.d`. Patch it to replace the `armada_thermal` device name by `f10e4078.thermal`.
 * Copy the Helios4 Linux package to `./img/root`.
+* Copy `helios4-wol.service` to `./img/usr/lib/systemd/system/`.
 * Copy `qemu-arm-static` to `./img/usr/bin`.
 * Register qemu-arm-static as ARM interpreter in the host kernel
 * Use `arch-chroot` to enter to the `./img/` chroot, then:
@@ -71,9 +74,10 @@ Here are all the steps performed by the script:
     * populate the Arch Linux ARM package signing keys
     * upgrade the Arch Linux ARM system
     * install the Helios4 Linux kernel
-    * install lm_sensors
+    * install lm_sensors and ethtool packages
     * enable the fancontrol service to start on boot
-* Remove Helios4 Linux packages from `./img/root`.
+    * enable the Helios4 Wake-on-LAN service to start on boot
+* Remove the Helios4 Linux package from `./img/root`.
 * Remove `qemu-arm-static` from `./img/usr/bin`.
 * Copy the fancontrol configuration file `fancontrol_pwm-fan-mvebu-next.conf` to `./img/etc/fancontrol`.
 * Make the `lm75` kernel module loaded on boot by creating `./img/etc/modules-load.d/lm75.conf`.
