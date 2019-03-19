@@ -152,7 +152,7 @@ sync
 umount "${MOUNT_DIR}"
 
 echo_step Build U-Boot...
-[ ! -d "u-boot" ] && git clone https://github.com/helios-4/u-boot.git -b helios4
+[ ! -d "u-boot" ] && git clone --depth=1 https://github.com/helios-4/u-boot.git -b helios4
 cd u-boot
 [ ! -f u-boot-spl.kwb ] && {
     export ARCH=arm
